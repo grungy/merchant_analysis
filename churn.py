@@ -100,33 +100,10 @@ def plot_merchant_bool(t_days, transactions, bool_transactions, id_merchant):
     ax2.set_title("Are There Sales Today?")
     ax2.set_ylabel("Yes (1) / No (0)")
 
-
-# print(first_day, last_day)
-# id_merchant = int(0x005e8bb6fb)
-# single_merchant = by_merchant.get_group(id_merchant)
-# t_days, transactions = process_merchant_to_time_series(single_merchant)
-
-# threshold = get_threshold(transactions)
-# # thresholded_transactions = threshold_transactions(transactions, threshold)
-# bool_transactions = get_boolean_transactions(transactions, threshold)
-# i_non_zero = np.nonzero(bool_transactions)
-# i_diff_non_zero = np.diff(i_non_zero[0])  
-
-
-# print(i_non_zero)
-# print(i_diff_non_zero)
-
-# plot_merchant(t_days, transactions, id_merchant)
-# plot_merchant_bool(t_days, transactions, bool_transactions, id_merchant)
-# histogram_no_sales(i_diff_non_zero, id_merchant)
-# histogram(transactions, id_merchant, threshold=threshold)
-# diffs_non_zero = i_diff_non_zero
-
 container = []
 bin_edge_container = []
 
 num_samples = 100
-# merchant_sample = pd.concat( [ by_merchant.get_group(group) for i,group in enumerate( by_merchant.groups) if i < num_samples ] ).groupby('merchant') 
 merchant_ids = [0x4e0e5fd73, 0xc6ae1f908f, 0x005e8bb6fb]
 
 for id_merchant in merchant_ids:

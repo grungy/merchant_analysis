@@ -26,47 +26,6 @@ print(feature_vectors)
 feature_vectors = feature_vectors[:, :8]
 print(feature_vectors.shape)
 
-# print(np.nonzero(np.isnan(feature_vectors)))
-# print(np.min(feature_vectors))
-# feature_vectors = feature_vectors[:, 8:]
-# print(feature_vectors.shape)
-
-# feature_vectors = feature_vectors[:, :8]
-# to_be_scaled_features = feature_vectors[:, :8]
-
-# Scale the feature vectors for average daily sales
-# print("scaling")
-# scaler = MinMaxScaler()
-# scaler.fit(feature_vectors)
-# print(scaler.data_max_)
-# feature_vectors = scaler.transform(feature_vectors)
-
-
-# drop people with only one transaction.
-# print("msk_fv")
-# msk_fv = np.array(feature_vectors[:, 8] > 1000)
-# print(msk_fv.shape)
-# feature_vectors = feature_vectors[msk_fv, :]
-
-# print(msk_fv.shape)
-
-# pca = PCA(2)  # project from 9 to 2 dimensions
-# projected = pca.fit_transform(feature_vectors)
-# print(feature_vectors)
-# print(projected)
-
-# plt.scatter(projected[:, 0], projected[:, 1],
-#              edgecolor='none', alpha=0.5,
-#             cmap=plt.cm.get_cmap('rainbow', 10))
-# plt.xlabel('component 1')
-# plt.ylabel('component 2')
-# plt.colorbar();
-# plt.show()
-# pca = PCA().fit(feature_vectors)
-# plt.plot(np.cumsum(pca.explained_variance_ratio_))
-# plt.xlabel('number of components')
-# plt.ylabel('cumulative explained variance');
-
 # Elbow Plot
 wcss = [] 
 for i in range(1, 11): 

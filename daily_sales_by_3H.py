@@ -14,9 +14,6 @@ def process_merchant(single_merchant):
     
     single_merchant = single_merchant.set_index(['time'])
     id_merchant = single_merchant['merchant'][0]
-    # print("id_merchant")
-    # print(single_merchant['merchant'])
-    # print(id_merchant)
 
     hour_3 = pd.DataFrame()
     hour_3['cents'] = single_merchant['cents'].resample('3H').sum()
@@ -43,20 +40,6 @@ def process_to_feature_vector(grpd_merchant, num_transactions, sum_transactions,
 df = make_df()
 
 merchant_transactions = df.groupby('merchant')
-
-# for key, grp in merchant_transactions:
-#     single_merchant = grp
-#     grouped_single = process_merchant_avg_cents_hour_of_day(single_merchant)
-#     df_feature_vector = process_to_feature_vector(grouped_single)
-
-#     # multiline plot with group by
-#     for key, grp in grouped_single.groupby(['weekDay']): 
-#         plt.plot(grp['hour'], grp['cents'], marker='o', label = "Week Day {0:01d}".format(key))
-#     plt.xlabel("Hours in the Day (0 - 24)")
-#     plt.ylabel("transaction amount (cents)")
-#     plt.title("Summed Daily Sales Aggregated by 3 Hour Blocks")
-#     plt.legend(loc='best')    
-#     plt.show()
 cnt_transactions = merchant_transactions.size().reset_index(name='cnt').sort_values(['cnt'], ascending=False)
 cnt_transactions = cnt_transactions.set_index('merchant')
 

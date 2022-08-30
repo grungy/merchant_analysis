@@ -68,7 +68,6 @@ def process_merchant(single_merchant):
     t_days = t_secs / (3600 * 24)
 
     if t_days.shape[0] < (2 * 7 * 24):
-        # raise Exception("Not enough points for week frequencies.")
         return None
     
 
@@ -91,8 +90,6 @@ def process_merchant(single_merchant):
     
     if vec_harmonic_day is not None:
         norm_day = (vec_harmonic_day / transactions_fft_mag[0])
-        # print("transaction_fft_mag[0]: ", transactions_fft_mag[0])
-        # print("vec_harmonic_day: ", vec_harmonic_day)
         if np.any(np.isnan(norm_day)):
             print("vec_harmonic_day NAN")
             print(vec_harmonic_day)
@@ -135,20 +132,6 @@ def process_merchant(single_merchant):
     Y = transactions_fft_mag[S_f_nn]
     fc = 1/30
 
-    # print("Calcuate Month harmonic_vector")
-    # vec_harmonic_month = harmonic_vector(X, Y, 1/30)
-    # if vec_harmonic_month is not None:
-    #     norm_month = (vec_harmonic_month / np.max(vec_harmonic_month))
-    #     if np.any(np.isnan(norm_month)):
-    #         print("vec_harmonic_month NAN")
-    #         print(vec_harmonic_month)
-    #         print(np.count_nonzero(transactions))
-    #         raise Exception("vech harmonic nan")
-    # else:
-    #     print(vec_harmonic_month)
-
-    # print(vec_harmonic_day, vec_harmonic_week)
-    # print(vec_harmonic_day.shape, vec_harmonic_week.shape)
     vec_harmonic = np.concatenate([norm_day, norm_week])
     return vec_harmonic
 
@@ -160,7 +143,6 @@ def process_merchant_plot(single_merchant):
     df_hourly['cents'] = single_merchant['cents'].resample('1H').sum()
     df_hourly.insert(1, "merchant", id_merchant)
     df_hourly = df_hourly.reset_index('time')
-    # print(df_hourly)
 
     transactions = df_hourly['cents'].to_numpy()
 
@@ -178,7 +160,6 @@ def process_merchant_plot(single_merchant):
     
 
     dt = t_secs[1] - t_secs[0]
-    # print("time delta used: ", dt)
     
     transactions_fft = sp.fftpack.fft(transactions)
     transactions_fft_mag = np.abs(transactions_fft)
@@ -221,55 +202,14 @@ by_merchant = df.groupby('merchant')
 cnt_transactions = by_merchant.size().reset_index(name='cnt').sort_values(['cnt'], ascending=False)
 grp_sum_transactions = by_merchant.sum().sort_values(['cents'], ascending=False)
 
-#Top 200 merchants by num transactions
+# Top 200 merchants by num transactions
 top200 = cnt_transactions[0:200]
 print("top200")
-# by_merchant = df.set_index('merchant').loc[top200['merchant']].groupby('merchant')
 print(by_merchant)
-
-# Filter merchants who have less than 5 transactions. 
-# cnt_transactions_fltrd = cnt_transactions[cnt_transactions['cnt'] >= 5]
-
-# by_merchant_fltrd = by_merchant[cnt_transactions['cnt'] >= 5]
 
 id_merchant = cnt_transactions.iloc[0]['merchant']
 id_merchant = 11804140257
 id_merchant = int(0x005e8bb6fb)
-# 
-# id_merchant = int(0x575c7901)
+
 single_merchant = by_merchant.get_group(id_merchant)
 vec_single_harmonic = process_merchant_plot(single_merchant)
-# print(vec_single_harmonic)
-
-# grp_feature_vectors = pd.DataFrame()
-
-# for key, grp in by_merchant:
-#     single_merchant = grp
-#     id_merchant = key
-#     print("Beginnging of: ", id_merchant)
-#     print(single_merchant['time'].count())
-#     print(single_merchant)
-#     if(single_merchant['time'].count() < 200):
-#         print("too small num transactions: ", single_merchant['time'].count())
-#         print(single_merchant)
-#         continue
-#     else:
-#         # num_transactions = cnt_transactions.loc[id_merchant]
-#         # sum_transactions = grp_sum_transactions.loc[id_merchant]
-#         vec_single_harmonic = process_merchant_plot(single_merchant)
-        
-#         if vec_single_harmonic is None:
-#             print("vec_single_harmonic is None")
-#             print(vec_single_harmonic)
-#             print(single_merchant)
-#             # process_merchant_plot(single_merchant)
-#         else:
-#             df_feature_vector = pd.DataFrame(columns=['merchant', 'vector'])
-#             df_feature_vector.loc[0] = [id_merchant, vec_single_harmonic]
-#             # df_feature_vector = process_to_feature_vector(vec_single_harmonic, num_transactions, sum_transactions)
-#             # print("df feature vector")
-#             # print(df_feature_vector)
-#             grp_feature_vectors = grp_feature_vectors.append(df_feature_vector, ignore_index=True)
-
-# print(grp_feature_vectors)
-# grp_feature_vectors.to_pickle('feature_vectors_fourier_day_week_month_normalized_to_dc_harmonic_top200.pkl')

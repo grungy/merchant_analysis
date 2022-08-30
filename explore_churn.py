@@ -83,6 +83,5 @@ bool_transactions = get_boolean_transactions(transactions, threshold)
 i_non_zero = np.nonzero(bool_transactions)
 i_diff_non_zero = np.diff(i_non_zero[0])
 
-# plot_merchant(t_days, transactions, id_merchant)
 plot_merchant_bool(t_days[0:-1], transactions[0:-1], bool_transactions[0:-1], id_merchant)
 plt.show()
