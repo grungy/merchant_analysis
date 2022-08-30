@@ -74,3 +74,19 @@ A calculation pipeline was used to calculate whether a merchant has churned or n
 The first step was to resample the time series and calculate the counts per day of a merchant’s time series. A plot of days vs transaction counts is included below. 
 
 ![Alt text](./imgs/resampled_5e8bb6fb.png?raw=true "Transactions of Merchant 5e8bb6fb")
+
+The next step is to threshold the signal using Otsu’s method to remove very low value transactions from being considered in this calculation. This follows my assumption that transactions that are low value compared to the values in the rest of the time series are equivalent to no transactions. This gives us a variable threshold based on maximizing the variance between two classes in a distribution. This assumes a bi-modal like distribution because there will be mode around zero and one around a high value for the actual values. The threshold chosen with Otsu’s method is shown in the red line on the histogram plot below. The threshold is used to create a binary array that represents whether there were sales or no sales in a given time period. A plot showing how the binary array lines up with the original plot of the counts.
+
+![Alt text](./imgs/otsu_5e8bb6fb.png?raw=true "Transactions of Merchant 5e8bb6fb")
+![Alt text](./imgs/binary_5e8bb6fb.png?raw=true "Transactions of Merchant 5e8bb6fb")
+
+By finding the indexes of the binary array using numpy’s nonzero function it’s possible to take the difference of the indexes and arrive at an array that is a representation of how many days with no activity. Finally, plotting a histogram of the resulting array yields a very clear distinction between regular behavior and churn.
+
+![Alt text](./imgs/no_sales_5e8bb6fb.png?raw=true "Transactions of Merchant 5e8bb6fb")
+
+### Identify Churned Merchants in the Dataset
+To identify churned merchants in the dataset a threshold of 60 days was chosen. Then for each merchant the last gap of days of no sales was compared to the chosen churn threshold of 60 days. If the gap of no sales exceeds the threshold the merchant is considered as churned. A full list of churned merchants is included in the zip file and called “churned_merchants.pkl”. In total, 7047 merchants were considered to have churned. This is reasonable given the distribution of the total number of transactions per merchant is heavily skewed towards the lower end of the distribution. 
+
+This method has some weaknesses. Merchant 2d07bba was labeled as not churned, but the number of transactions is so low that it’s hard to make any conclusions about the merchant’s behavior. A more robust filtering mechanism based on activity gap and number of transactions would probably yield better results. 
+
+![Alt text](./imgs/merchant_2d07bba.png?raw=true "Transactions of Merchant 5e8bb6fb")
